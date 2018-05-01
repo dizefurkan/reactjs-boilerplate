@@ -1,2 +1,2 @@
 import App from './app';
-console.log('test');
+import style from './main.css';
