@@ -1,0 +1,13 @@
+
+.title {
+  display: block;
+  float: left;
+  color: darkblue;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-right: 10px;
+}
+
+.title:last-child {
+  margin-right: 0;
+}
