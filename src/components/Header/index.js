@@ -5,12 +5,14 @@ import globalStyles from '../../public/main.css';
 class Header extends React.Component {
   render() {
     return (
-      <ul className={globalStyles.clearfix}>
-        <li className={styles.title}><a href="javascript:;">Link</a></li>
-        <li className={styles.title}><a href="javascript:;">Link</a></li>
-        <li className={styles.title}><a href="javascript:;">Link</a></li>
-        <li className={styles.title}><a href="javascript:;">Link</a></li>
-      </ul>
+      <div className="header">
+        <ul className={globalStyles.clearfix}>
+          <li className={styles.title}><a href="javascript:;">Link</a></li>
+          <li className={styles.title}><a href="javascript:;">Link</a></li>
+          <li className={styles.title}><a href="javascript:;">Link</a></li>
+          <li className={styles.title}><a href="javascript:;">Link</a></li>
+        </ul>
+      </div>
     )
   }
 }

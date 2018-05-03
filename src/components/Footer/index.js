@@ -5,15 +5,19 @@ import globalStyles from '../../public/main.css';
 class Footer extends React.Component {
   render() {
     return (
-      <div>
-        <h4>
-          <a
-            href="https://github.com/dizefurkan"
-            className={styles.title}
-          >
-            github.com/dizefurkan
+      <div className="footer container">
+        <div className="row">
+          <div className="col-xs-12">
+            <h4 className={`${styles.title} araba`}>
+              <a
+                href="https://github.com/dizefurkan"
+                className={styles.title}
+              >
+                github.com/dizefurkan
           </a>
-        </h4>
+            </h4>
+          </div>
+        </div>
       </div>
     )
   }
