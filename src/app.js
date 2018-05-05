@@ -1,6 +1,5 @@
 import React from 'react';
-import {Col, Grid, Row} from 'react-bootstrap';
-
+import { Col, Grid, Row } from 'react-bootstrap';
 import Header from './components/Header';
 import Section from './components/Section';
 import Footer from './components/Footer';
@@ -25,7 +24,7 @@ class App extends React.Component {
           </Col>
         </Row>
       </Grid>
-    )
+    );
   }
 }
 

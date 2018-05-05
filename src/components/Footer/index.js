@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './styles.css'
+import styles from './styles.css';
 import globalStyles from '../../public/main.css';
 
 class Footer extends React.Component {
@@ -19,7 +19,7 @@ class Footer extends React.Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

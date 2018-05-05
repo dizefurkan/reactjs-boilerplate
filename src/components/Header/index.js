@@ -1,7 +1,6 @@
 import React from 'react';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-
-import styles from './styles.css'
+import styles from './styles.css';
 import globalStyles from '../../public/main.css';
 
 class Header extends React.Component {
@@ -10,15 +9,15 @@ class Header extends React.Component {
       <div className="header">
         <ul className={globalStyles.clearfix}>
           <li className={styles.title}>
-          <FontAwesomeIcon icon='coffee' />
+            <FontAwesomeIcon icon={['fas', 'home']} />
           </li>
-          <li className={styles.title}><a href="javascript:;">Link</a></li>
-          <li className={styles.title}><a href="javascript:;">Link</a></li>
-          <li className={styles.title}><a href="javascript:;">Link</a></li>
-          <li className={styles.title}><a href="javascript:;">Link</a></li>
+          <li className={styles.title}><a href="#">Link</a></li>
+          <li className={styles.title}><a href="#">Link</a></li>
+          <li className={styles.title}><a href="#">Link</a></li>
+          <li className={styles.title}><a href="#">Link</a></li>
         </ul>
       </div>
-    )
+    );
   }
 }
 

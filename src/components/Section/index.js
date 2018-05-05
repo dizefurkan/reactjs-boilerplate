@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './styles.css'
+import styles from './styles.css';
 
 class Section extends React.Component {
   render() {
@@ -7,7 +7,7 @@ class Section extends React.Component {
       <div className={`section ${styles.box}`}>
         <h2 className={styles.title}>SECTION</h2>
       </div>
-    )
+    );
   }
 }
 
