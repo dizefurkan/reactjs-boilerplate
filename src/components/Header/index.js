@@ -1,5 +1,4 @@
 import React from 'react';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import styles from './styles.css';
 import globalStyles from '../../public/main.css';
 
@@ -9,7 +8,7 @@ class Header extends React.Component {
       <div className="header">
         <ul className={globalStyles.clearfix}>
           <li className={styles.title}>
-            <FontAwesomeIcon icon={['fas', 'home']} />
+            <i className="fas fa-user"></i>
           </li>
           <li className={styles.title}><a href="#">Link</a></li>
           <li className={styles.title}><a href="#">Link</a></li>
