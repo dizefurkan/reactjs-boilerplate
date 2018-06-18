@@ -8,12 +8,13 @@ class Header extends React.Component {
       <div className="header">
         <ul className={globalStyles.clearfix}>
           <li className={styles.title}>
-            <i className="fas fa-user"></i>
+            <a href="/">
+              <i className="fas fa-user"></i>
+              <span>Home</span>
+            </a>
           </li>
-          <li className={styles.title}><a href="#">Link</a></li>
-          <li className={styles.title}><a href="#">Link</a></li>
-          <li className={styles.title}><a href="#">Link</a></li>
-          <li className={styles.title}><a href="#">Link</a></li>
+          <li className={styles.title}><a href="/login">Login</a></li>
+          <li className={styles.title}><a href="/register">Register</a></li>
         </ul>
       </div>
     );

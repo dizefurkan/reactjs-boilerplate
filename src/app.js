@@ -1,29 +1,26 @@
 import React from 'react';
-import { Col, Grid, Row } from 'react-bootstrap';
+import {
+  BrowserRouter,
+  Route,
+  Link,
+  Switch,
+} from 'react-router-dom';
 import Header from './components/Header';
 import Section from './components/Section';
 import Footer from './components/Footer';
+import Login from './views/pages/Login';
+import Register from './views/pages/Register';
 
 class App extends React.Component {
   render() {
     return (
-      <Grid>
-        <Row>
-          <Col xs={12}>
-            <Header />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12}>
-            <Section />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12}>
-            <Footer />
-          </Col>
-        </Row>
-      </Grid>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path='/' component={Header} />
+          <Route exact path='/login' component={Login} />
+          <Route exact path='/register' component={Register} />
+        </Switch>
+      </BrowserRouter>
     );
   }
 }
