@@ -9,7 +9,7 @@ class Header extends React.Component {
         <ul className={globalStyles.clearfix}>
           <li className={styles.title}>
             <a href="/">
-              <i className="fas fa-user"></i>
+              <i className="fas fa-home"></i>
               <span>Home</span>
             </a>
           </li>
