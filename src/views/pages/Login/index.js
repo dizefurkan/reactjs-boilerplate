@@ -4,6 +4,8 @@ import {
   Row,
   Col,
 } from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import DocumentTitle from 'react-document-title';
 import cx from 'classnames';
 import validator from 'react-validation';
 import gbStyles from 'src/public/main.css';
@@ -84,91 +86,97 @@ class Login extends Component {
   render() {
     const { validation, formField } = this.state;
     return (
-      <Grid>
-        <Row>
-          <Col xs={12} md={8} mdOffset={2}>
-            <h1>Login Page</h1>
-            <form
-              className={gbStyles.clearfix}
-              onSubmit={e => this.onSubmit(e)}
-            >
-              <span className={styles.inputErrorMessage}>
-                { !validation.email && formField.email }
-              </span>
-              <div className={cx(
-                styles.inputBox,
-                gbStyles.clearfix,
-              )}>
+      <DocumentTitle title={this.props.title}>
+        <Grid>
+          <Row>
+            <Col xs={12} md={8} mdOffset={2}>
+              <h2>{this.props.title} Page</h2>
+              <form
+                className={gbStyles.clearfix}
+                onSubmit={e => this.onSubmit(e)}
+              >
+                <span className={styles.inputErrorMessage}>
+                  { !validation.email && formField.email }
+                </span>
                 <div className={cx(
-                  styles.inputMeta,
-                  {
-                    [styles.fieldError]: !validation.email
-                      && formField.email.length,
-                  },
+                  styles.inputBox,
+                  gbStyles.clearfix,
                 )}>
-                  <i className="far fa-user"></i>
-                  <span className={styles.inputLabel}>
-                    email
-                  </span>
-                </div>
-                <input
-                  type="email"
-                  className={cx(
-                    styles.input,
+                  <div className={cx(
+                    styles.inputMeta,
                     {
-                      [styles.inputError]: !validation.email
+                      [styles.fieldError]: !validation.email
                         && formField.email.length,
                     },
-                  )}
-                  placeholder="Example: test@test.com"
-                  name="email"
-                  onChange={e => this.onChange(e) }
-                />
-              </div>
-              <span className={styles.inputErrorMessage}>
-                { !validation.password && formField.password }
-              </span>
-              <div className={cx(
-                styles.inputBox,
-                gbStyles.clearfix,
-              )}>
-                <div className={cx(
-                  styles.inputMeta,
-                  {
-                    [styles.fieldError]: !validation.password
-                      && formField.password.length,
-                  },
-                )}>
-                  <i className="fas fa-key"></i>
-                  <span className={styles.inputLabel}>
-                    Password
-                  </span>
+                  )}>
+                    <i className="far fa-user"></i>
+                    <span className={styles.inputLabel}>
+                      email
+                    </span>
+                  </div>
+                  <input
+                    type="email"
+                    className={cx(
+                      styles.input,
+                      {
+                        [styles.inputError]: !validation.email
+                          && formField.email.length,
+                      },
+                    )}
+                    placeholder="Example: test@test.com"
+                    name="email"
+                    onChange={e => this.onChange(e) }
+                  />
                 </div>
-                <input
-                  type="password"
-                  className={cx(
-                    styles.input,
+                <span className={styles.inputErrorMessage}>
+                  { !validation.password && formField.password }
+                </span>
+                <div className={cx(
+                  styles.inputBox,
+                  gbStyles.clearfix,
+                )}>
+                  <div className={cx(
+                    styles.inputMeta,
                     {
-                      [styles.inputError]: !validation.password
+                      [styles.fieldError]: !validation.password
                         && formField.password.length,
                     },
-                  )}
-                  placeholder="Example: 135645"
-                  name="password"
-                  onChange={e => this.onChange(e)}
+                  )}>
+                    <i className="fas fa-key"></i>
+                    <span className={styles.inputLabel}>
+                      Password
+                    </span>
+                  </div>
+                  <input
+                    type="password"
+                    className={cx(
+                      styles.input,
+                      {
+                        [styles.inputError]: !validation.password
+                          && formField.password.length,
+                      },
+                    )}
+                    placeholder="Example: 135645"
+                    name="password"
+                    onChange={e => this.onChange(e)}
+                  />
+                </div>
+                <input
+                  type="submit"
+                  className={styles.submit}
+                  value='Submit'
                 />
-              </div>
-              <input
-                type="submit"
-                className={styles.submit}
-                value='Submit'
-              />
-            </form>
-          </Col>
-        </Row>
-      </Grid>
+              </form>
+            </Col>
+          </Row>
+        </Grid>
+      </DocumentTitle>
     );
   }
 }
 
 export default Login;
+
+Login.propTypes = {
+  title: PropTypes.string.isRequired,
+};

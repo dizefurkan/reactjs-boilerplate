@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DocumentTitle from 'react-document-title';
+import Header from 'components/Header';
+import Section from 'components/Section';
+import Footer from 'components/Footer';
 import styles from './styles.css';
 
-class Register extends Component {
+class Home extends Component {
   render() {
     return (
       <DocumentTitle title={this.props.title}>
         <div>
-          <h1>Register Page</h1>
+          <Header />
+          <Section />
+          <Footer />
         </div>
       </DocumentTitle>
     );
   }
 }
 
-export default Register;
+export default Home;
 
-Register.propTypes = {
+Home.propTypes = {
   title: PropTypes.string.isRequired,
 };

@@ -1,8 +1,7 @@
-.box {
-  height: 100vh;
+.section {
+    height: 100vh;
 }
 
 .title {
-  text-align: center;
-  font-weight: bolder;
+    text-align: center;
 }
