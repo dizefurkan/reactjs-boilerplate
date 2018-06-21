@@ -8,8 +8,6 @@ import {
 import DocumentTitle from 'react-document-title';
 import { PropsRoute, PublicRoute, PrivateRoute } from 'react-router-with-props';
 import Home from './components/Home';
-import Section from './components/Section';
-import Footer from './components/Footer';
 import Login from './views/pages/Login';
 import Register from './views/pages/Register';
 
