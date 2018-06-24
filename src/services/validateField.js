@@ -24,8 +24,11 @@ const syntax = (key, value) => {
 
 const required = (fieldName, value) => {
   const response = {};
-  response.type = fieldName;
   if (value.length === 0) {
+    response.fieldClear = true;
+    response.hasError = true;
+    response.message = '';
+  } else if (value.length >= 1 && value.length <= 1) {
     response.hasError = true;
     response.message = `${fieldName} is Required. Please fill this field`;
   } else {
@@ -62,6 +65,11 @@ export default (obj) => {
     const isRequired = hasOwnProperty(field, 'isRequired');
     if (isRequired) {
       res = required(fieldName, field.value);
+      if (res.fieldClear) {
+        resultObj[fieldName] = res;
+        return resultObj;
+      }
+
       if (res.hasError) {
         resultObj[fieldName] = res;
         return resultObj;

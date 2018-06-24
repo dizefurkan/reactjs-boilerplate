@@ -27,6 +27,7 @@ class Login extends Component {
         email: false,
         password: false,
       },
+      lastFieldName: '',
     };
   }
 
@@ -46,33 +47,45 @@ class Login extends Component {
     }
   }
 
-  controlFormValidity() {
-    const { email, password } = this.state;
-    const formSubmitObj = this.formObject(email, password);
+  controlFormValidity(fieldName, fieldValue) {
+    const formSubmitObj = this.formObject(fieldName, fieldValue);
     const result = validateField(formSubmitObj);
     this.controlField(result);
   }
 
-  formObject(email, password) {
-    const formObject = {
-      email: {
-        isRequired: true,
-        length: {
-          min: 5,
-          max: 40,
-        },
-        value: email,
-        syntax: true,
-      },
-      password: {
-        isRequired: true,
-        length: {
-          min: 6,
-          max: 40,
-        },
-        value: password,
-      },
-    };
+  formObject(fieldName, fieldValue) {
+    let formObject = {};
+    switch (fieldName) {
+      case 'email': {
+        formObject = {
+          email: {
+            isRequired: true,
+            length: {
+              min: 5,
+              max: 40,
+            },
+            value: fieldValue,
+            syntax: true,
+          },
+        };
+        break;
+      }
+      case 'password': {
+        formObject = {
+          password: {
+            isRequired: true,
+            length: {
+              min: 6,
+              max: 40,
+            },
+            value: fieldValue,
+          },
+        };
+        break;
+      }
+      default:
+        break;
+    }
     return formObject;
   }
 
@@ -81,7 +94,7 @@ class Login extends Component {
     this.setState({
       [name]: value,
     }, () => {
-      this.controlFormValidity();
+      this.controlFormValidity(name, value);
     });
   }
 
@@ -92,20 +105,23 @@ class Login extends Component {
       validation,
       formField,
     } = this.state;
+    const objArray = Object.getOwnPropertyNames(obj);
+    this.setState({
+      lastFieldName: objArray[0],
+    });
+    if (!objArray.length) {
+      validation[this.state.lastFieldName] = true;
+      formField[this.state.lastFieldName] = '';
+    }
     if (obj.email) {
       validation.email = false;
       formField.email = obj.email.message;
-    } else {
-      validation.email = true;
-      formField.email = '';
     }
     if (obj.password) {
       validation.password = false;
       formField.password = obj.password.message;
-    } else {
-      validation.password = true;
-      formField.password = '';
     }
+
     this.setState({
       validation,
       formField,
@@ -155,7 +171,7 @@ class Login extends Component {
                     placeholder="Example: test@test.com"
                     name="email"
                     onChange={e => this.onChange(e) }
-                    required
+                    // required
                   />
                 </div>
                 <span className={styles.inputErrorMessage}>
@@ -189,7 +205,7 @@ class Login extends Component {
                     placeholder="Example: 135645"
                     name="password"
                     onChange={e => this.onChange(e)}
-                    required
+                    // required
                   />
                 </div>
                 <input
