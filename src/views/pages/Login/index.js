@@ -4,12 +4,13 @@ import {
   Row,
   Col,
 } from 'react-bootstrap';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import DocumentTitle from 'react-document-title';
-import cx from 'classnames';
-import validator from 'react-validation';
+import validateField from 'src/services/validateField';
 import gbStyles from 'src/public/main.css';
 import styles from './styles.css';
+
 
 class Login extends Component {
   constructor(props) {
@@ -31,6 +32,48 @@ class Login extends Component {
 
   onSubmit(event) {
     event.preventDefault();
+    const { validation } = this.state;
+    if (validation.email && validation.password) {
+      validation.form = true;
+      this.setState({
+        validation,
+      });
+    } else {
+      validation.form = false;
+      this.setState({
+        validation,
+      });
+    }
+  }
+
+  controlFormValidity() {
+    const { email, password } = this.state;
+    const formSubmitObj = this.formObject(email, password);
+    const result = validateField(formSubmitObj);
+    this.controlField(result);
+  }
+
+  formObject(email, password) {
+    const formObject = {
+      email: {
+        isRequired: true,
+        length: {
+          min: 5,
+          max: 40,
+        },
+        value: email,
+        syntax: true,
+      },
+      password: {
+        isRequired: true,
+        length: {
+          min: 6,
+          max: 40,
+        },
+        value: password,
+      },
+    };
+    return formObject;
   }
 
   onChange(event) {
@@ -38,44 +81,30 @@ class Login extends Component {
     this.setState({
       [name]: value,
     }, () => {
-      this.validationField(name, value);
+      this.controlFormValidity();
     });
   }
 
-  validationField(fieldName, value) {
-    const { formField, validation } = this.state;
-    let invalidType;
-    switch (fieldName) {
-      case 'email':
-        invalidType = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-        if (value.length <= 5) {
-          formField[fieldName] =
-            `${fieldName} can not be short than 5 characters`;
-          validation[fieldName] = false;
-        } else if (!invalidType) {
-          formField[fieldName] = 'Please enter a valid email';
-          validation[fieldName] = false;
-        } else {
-          formField[fieldName] = '';
-          validation[fieldName] = true;
-        }
-        break;
-      case 'password':
-        if (value.length <= 6) {
-          formField[fieldName] =
-            `${fieldName} can not be short than 6 characters`;
-          validation[fieldName] = false;
-        } else {
-          formField[fieldName] = '';
-          validation[fieldName] = true;
-        }
-        break;
-      default:
-        break;
+  controlField(obj) {
+    const {
+      email,
+      password,
+      validation,
+      formField,
+    } = this.state;
+    if (obj.email) {
+      validation.email = false;
+      formField.email = obj.email.message;
+    } else {
+      validation.email = true;
+      formField.email = '';
     }
-    if (value.length === 0) {
-      formField[fieldName] = '';
-      validation[fieldName] = false;
+    if (obj.password) {
+      validation.password = false;
+      formField.password = obj.password.message;
+    } else {
+      validation.password = true;
+      formField.password = '';
     }
     this.setState({
       validation,
@@ -126,6 +155,7 @@ class Login extends Component {
                     placeholder="Example: test@test.com"
                     name="email"
                     onChange={e => this.onChange(e) }
+                    required
                   />
                 </div>
                 <span className={styles.inputErrorMessage}>
@@ -159,6 +189,7 @@ class Login extends Component {
                     placeholder="Example: 135645"
                     name="password"
                     onChange={e => this.onChange(e)}
+                    required
                   />
                 </div>
                 <input
@@ -175,8 +206,8 @@ class Login extends Component {
   }
 }
 
-export default Login;
-
 Login.propTypes = {
   title: PropTypes.string.isRequired,
 };
+
+export default Login;
