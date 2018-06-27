@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 import { Grid, Col, Row } from 'react-bootstrap';
 import gbStyles from 'public/main.css';
 import styles from './styles.css';
@@ -9,13 +10,13 @@ class Header extends React.Component {
       <Grid>
         <Row>
           <Col xs={12}>
-            <div className="header">
-              <ul className={gbStyles.clearfix}>
+            <div className={styles.header}>
+              <ul className={cx(
+                gbStyles.clearfix,
+                styles.list,
+              )}>
                 <li className={styles.title}>
-                  <a href="/">
-                    <i className="fas fa-home"></i>
-                    <span>Home</span>
-                  </a>
+                  <a href="/">Home</a>
                 </li>
                 <li className={styles.title}>
                   <a href="/login">Login</a>
