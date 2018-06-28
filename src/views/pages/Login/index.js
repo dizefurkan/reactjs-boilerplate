@@ -7,7 +7,7 @@ import {
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import DocumentTitle from 'react-document-title';
-import validateField from 'src/services/validateField';
+import validateField from 'src/utils/validateField';
 import gbStyles from 'src/public/main.css';
 import styles from './styles.css';
 
