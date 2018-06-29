@@ -25,10 +25,6 @@ const syntax = (key, value) => {
 const required = (fieldName, value) => {
   const response = {};
   if (value.length === 0) {
-    response.fieldClear = true;
-    response.hasError = true;
-    response.message = '';
-  } else if (value.length >= 1 && value.length <= 1) {
     response.hasError = true;
     response.message = `${fieldName} is Required. Please fill this field`;
   } else {
@@ -57,40 +53,37 @@ const length = (fieldName, value, valueLength) => {
 export default (obj) => {
   const fieldsArray = [];
   const resultObj = {};
+  let fieldName;
   let res;
   fieldsArray.push(...Object.getOwnPropertyNames(obj));
   for (let i = 0; i < fieldsArray.length; i += 1) {
-    const field = obj[fieldsArray[i]];
-    const fieldName = fieldsArray[i];
-    const isRequired = hasOwnProperty(field, 'isRequired');
+    const fieldObj = obj[fieldsArray[i]];
+    fieldName = fieldsArray[i];
+    const isRequired = hasOwnProperty(fieldObj, 'isRequired');
     if (isRequired) {
-      res = required(fieldName, field.value);
-      if (res.fieldClear) {
-        resultObj[fieldName] = res;
-        return resultObj;
-      }
-
+      res = required(fieldName, fieldObj.value);
       if (res.hasError) {
         resultObj[fieldName] = res;
         return resultObj;
       }
     }
-    const isLength = hasOwnProperty(field, 'length');
+    const isLength = hasOwnProperty(fieldObj, 'length');
     if (isLength) {
-      res = length(fieldName, field.value, field.length);
+      res = length(fieldName, fieldObj.value, fieldObj.length);
       if (res.hasError) {
         resultObj[fieldName] = res;
         return resultObj;
       }
     }
-    const isSyntax = hasOwnProperty(field, 'syntax');
+    const isSyntax = hasOwnProperty(fieldObj, 'syntax');
     if (isSyntax) {
-      res = syntax(fieldName, field.value);
+      res = syntax(fieldName, fieldObj.value);
       if (res.hasError) {
         resultObj[fieldName] = res;
         return resultObj;
       }
     }
   }
+  resultObj[fieldName] = true;
   return resultObj;
 };

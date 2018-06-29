@@ -7,7 +7,9 @@ import {
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import DocumentTitle from 'react-document-title';
-import validateField from 'src/utils/validateField';
+import validateField from 'utils/validateField';
+import formFieldObject from 'utils/formFieldObject';
+import AuthService from 'services/authService';
 import gbStyles from 'src/public/main.css';
 import styles from './styles.css';
 
@@ -23,28 +25,23 @@ class Login extends Component {
         password: '',
       },
       validation: {
-        form: false,
         email: false,
         password: false,
       },
-      lastFieldName: '',
+      prevFieldName: '',
     };
+    this.AuthService = new AuthService();
   }
 
-  onSubmit(event) {
+  async onSubmit(event) {
     event.preventDefault();
-    const { validation } = this.state;
-    if (validation.email && validation.password) {
-      validation.form = true;
-      this.setState({
-        validation,
-      });
-    } else {
-      validation.form = false;
-      this.setState({
-        validation,
-      });
-    }
+    const { email, password, validation } = this.state;
+    this.controlFormValidity('email', email);
+    this.controlFormValidity('password', password);
+    // if (validation.email && validation.password) {
+    const result = await this.AuthService.login(email, password);
+    console.log(result);
+    // }
   }
 
   controlFormValidity(fieldName, fieldValue) {
@@ -54,47 +51,13 @@ class Login extends Component {
   }
 
   formObject(fieldName, fieldValue) {
-    let formObject = {};
-    switch (fieldName) {
-      case 'email': {
-        formObject = {
-          email: {
-            isRequired: true,
-            length: {
-              min: 5,
-              max: 40,
-            },
-            value: fieldValue,
-            syntax: true,
-          },
-        };
-        break;
-      }
-      case 'password': {
-        formObject = {
-          password: {
-            isRequired: true,
-            length: {
-              min: 6,
-              max: 40,
-            },
-            value: fieldValue,
-          },
-        };
-        break;
-      }
-      default:
-        break;
-    }
-    return formObject;
+    return formFieldObject(fieldName, fieldValue);
   }
 
   onChange(event) {
     const { target: { value, name } } = event;
     this.setState({
       [name]: value,
-    }, () => {
-      this.controlFormValidity(name, value);
     });
   }
 
@@ -105,23 +68,24 @@ class Login extends Component {
       validation,
       formField,
     } = this.state;
-    const objArray = Object.getOwnPropertyNames(obj);
-    this.setState({
-      lastFieldName: objArray[0],
-    });
-    if (!objArray.length) {
-      validation[this.state.lastFieldName] = true;
-      formField[this.state.lastFieldName] = '';
-    }
     if (obj.email) {
-      validation.email = false;
-      formField.email = obj.email.message;
+      if (obj.email.hasError) {
+        validation.email = false;
+        formField.email = obj.email.message;
+      } else {
+        validation.email = true;
+        formField.email = '';
+      }
     }
     if (obj.password) {
-      validation.password = false;
-      formField.password = obj.password.message;
+      if (obj.password.hasError) {
+        validation.password = false;
+        formField.password = obj.password.message;
+      } else {
+        validation.password = true;
+        formField.password = '';
+      }
     }
-
     this.setState({
       validation,
       formField,
@@ -140,73 +104,77 @@ class Login extends Component {
                 className={gbStyles.clearfix}
                 onSubmit={e => this.onSubmit(e)}
               >
-                <span className={styles.inputErrorMessage}>
-                  { !validation.email && formField.email }
-                </span>
-                <div className={cx(
-                  styles.inputBox,
-                  gbStyles.clearfix,
-                )}>
-                  <div className={cx(
-                    styles.inputMeta,
-                    {
-                      [styles.fieldError]: !validation.email
-                        && formField.email.length,
-                    },
-                  )}>
-                    <i className="far fa-user"></i>
-                    <span className={styles.inputLabel}>
-                      email
-                    </span>
-                  </div>
-                  <input
-                    type="email"
-                    className={cx(
-                      styles.input,
-                      {
-                        [styles.inputError]: !validation.email
-                          && formField.email.length,
-                      },
-                    )}
-                    placeholder="Example: test@test.com"
-                    name="email"
-                    onChange={e => this.onChange(e) }
-                    // required
-                  />
+                <div>
+                  <span className={styles.inputErrorMessage}>
+                    { !validation.email && formField.email }
+                  </span>
+                    <div className={cx(
+                      styles.inputBox,
+                      gbStyles.clearfix,
+                    )}>
+                      <div className={cx(
+                        styles.inputMeta,
+                        {
+                          [styles.fieldError]: !validation.email
+                            && formField.email.length,
+                        },
+                      )}>
+                        <i className="far fa-user"></i>
+                        <span className={styles.inputLabel}>
+                          email
+                        </span>
+                      </div>
+                      <input
+                        type="input"
+                        className={cx(
+                          styles.input,
+                          {
+                            [styles.inputError]: !validation.email
+                              && formField.email.length,
+                          },
+                        )}
+                        placeholder="Example: test@test.com"
+                        name="email"
+                        title="email"
+                        onChange={e => this.onChange(e) }
+                      />
+                    </div>
                 </div>
-                <span className={styles.inputErrorMessage}>
-                  { !validation.password && formField.password }
-                </span>
-                <div className={cx(
-                  styles.inputBox,
-                  gbStyles.clearfix,
-                )}>
+                <div>
+                  <span className={styles.inputErrorMessage}>
+                    {!validation.password && formField.password}
+                  </span>
                   <div className={cx(
-                    styles.inputMeta,
-                    {
-                      [styles.fieldError]: !validation.password
-                        && formField.password.length,
-                    },
+                    styles.inputBox,
+                    gbStyles.clearfix,
                   )}>
-                    <i className="fas fa-key"></i>
-                    <span className={styles.inputLabel}>
-                      Password
-                    </span>
-                  </div>
-                  <input
-                    type="password"
-                    className={cx(
-                      styles.input,
+                    <div className={cx(
+                      styles.inputMeta,
                       {
-                        [styles.inputError]: !validation.password
+                        [styles.fieldError]: !validation.password
                           && formField.password.length,
                       },
-                    )}
-                    placeholder="Example: 135645"
-                    name="password"
-                    onChange={e => this.onChange(e)}
-                    // required
-                  />
+                    )}>
+                      <i className="fas fa-key"></i>
+                      <span className={styles.inputLabel}>
+                        Password
+                    </span>
+                    </div>
+                    <input
+                      type="password"
+                      className={cx(
+                        styles.input,
+                        {
+                          [styles.inputError]: !validation.password
+                            && formField.password.length,
+                        },
+                      )}
+                      placeholder="Example: 135645"
+                      name="password"
+                      title="password"
+                      onChange={e => this.onChange(e)}
+                    />
+                  </div>
                 </div>
                 <input
                   type="submit"
