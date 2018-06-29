@@ -1,6 +1,6 @@
 import React from 'react';
+import fetch from 'services/customFetch';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { getItem } from 'services/test';
 import styles from './styles.css';
 
 class Section extends React.Component {
@@ -11,12 +11,17 @@ class Section extends React.Component {
       haveData: false,
     };
   }
+
   async clickHandler(event) {
     event.preventDefault();
-    const getItemResult = await getItem();
+    const obj = {
+      method: 'get',
+      url: 'https://jsonplaceholder.typicode.com/posts',
+    };
+    const data = await fetch(obj);
     this.setState({
       haveData: true,
-      data: getItemResult,
+      data,
     });
   }
 

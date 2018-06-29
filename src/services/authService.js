@@ -1,5 +1,5 @@
 import decode from 'jwt-decode';
-import axios from 'axios';
+
 export default class authService {
   constructor(domain) {
     this.domain = domain || 'http://localhost:3030';
@@ -7,14 +7,7 @@ export default class authService {
     this.getProfile = this.getProfile.bind(this);
   }
 
-  login(username, password) {
-    return axios({
-      method: 'post',
-      url: `${this.domain}/login`,
-      data: {
-        username,
-        password,
-      }
-    })
+  async login(username, password) {
+    const promise = await 
   }
 };
