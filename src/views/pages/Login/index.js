@@ -7,7 +7,7 @@ import {
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import DocumentTitle from 'react-document-title';
-import validateField from 'utils/validateField';
+import validateField, { hasOwnProperty } from 'utils/validateField';
 import formFieldObject from 'utils/formFieldObject';
 import AuthService from 'services/authService';
 import gbStyles from 'src/public/main.css';
@@ -28,7 +28,7 @@ class Login extends Component {
         email: false,
         password: false,
       },
-      prevFieldName: '',
+      submitMessage: '',
     };
     this.AuthService = new AuthService();
   }
@@ -38,10 +38,18 @@ class Login extends Component {
     const { email, password, validation } = this.state;
     this.controlFormValidity('email', email);
     this.controlFormValidity('password', password);
-    // if (validation.email && validation.password) {
-    const result = await this.AuthService.login(email, password);
-    console.log(result);
-    // }
+    if (validation.email && validation.password) {
+      const result = await this.AuthService.login(email, password);
+      const hasData = hasOwnProperty(result.data, 'success');
+      if (hasData) {
+        console.log(result.data);
+        const { data: { success, message, token } } = result;
+        const submitMessage = success ? token : message;
+        this.setState({
+          submitMessage,
+        });
+      }
+    }
   }
 
   controlFormValidity(fieldName, fieldValue) {
@@ -93,7 +101,7 @@ class Login extends Component {
   }
 
   render() {
-    const { validation, formField } = this.state;
+    const { validation, formField, submitMessage } = this.state;
     return (
       <DocumentTitle title={this.props.title}>
         <Grid>
@@ -104,46 +112,61 @@ class Login extends Component {
                 className={gbStyles.clearfix}
                 onSubmit={e => this.onSubmit(e)}
               >
-                <div>
-                  <span className={styles.inputErrorMessage}>
-                    { !validation.email && formField.email }
-                  </span>
+                {
+                  <p className={styles.submitMessage}>
+                    {submitMessage}
+                  </p>
+                }
+                <div className={styles.inputContainer}>
+                  {
+                    !validation.email &&
+                    <div className={styles.inputErrorMessageBox}>
+                      <span className={styles.inputErrorMessage}>
+                        { formField.email }
+                      </span>
+                    </div>
+                  }
+                  <div className={cx(
+                    styles.inputBox,
+                    gbStyles.clearfix,
+                  )}>
                     <div className={cx(
-                      styles.inputBox,
-                      gbStyles.clearfix,
+                      styles.inputMeta,
+                      {
+                        [styles.fieldError]: !validation.email
+                          && formField.email.length,
+                      },
                     )}>
-                      <div className={cx(
-                        styles.inputMeta,
+                      <i className="far fa-user"></i>
+                      <span className={styles.inputLabel}>
+                        email
+                      </span>
+                    </div>
+                    <input
+                      type="input"
+                      className={cx(
+                        styles.input,
                         {
-                          [styles.fieldError]: !validation.email
+                          [styles.inputError]: !validation.email
                             && formField.email.length,
                         },
-                      )}>
-                        <i className="far fa-user"></i>
-                        <span className={styles.inputLabel}>
-                          email
-                        </span>
-                      </div>
-                      <input
-                        type="input"
-                        className={cx(
-                          styles.input,
-                          {
-                            [styles.inputError]: !validation.email
-                              && formField.email.length,
-                          },
-                        )}
-                        placeholder="Example: test@test.com"
-                        name="email"
-                        title="email"
-                        onChange={e => this.onChange(e) }
-                      />
-                    </div>
+                      )}
+                      placeholder="Example: test@test.com"
+                      name="email"
+                      title="email"
+                      onChange={e => this.onChange(e) }
+                    />
+                  </div>
                 </div>
-                <div>
-                  <span className={styles.inputErrorMessage}>
-                    {!validation.password && formField.password}
-                  </span>
+                <div className={styles.inputContainer}>
+                  {
+                    !validation.password &&
+                    <div className={styles.inputErrorMessageBox}>
+                      <span className={styles.inputErrorMessage}>
+                        {formField.password}
+                      </span>
+                    </div>
+                  }
                   <div className={cx(
                     styles.inputBox,
                     gbStyles.clearfix,

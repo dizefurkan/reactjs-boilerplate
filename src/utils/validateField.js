@@ -1,7 +1,5 @@
-const hasOwnProperty = (field, key) => {
-  const result = Object.prototype.hasOwnProperty.call(field, key);
-  return result;
-};
+const hasOwnProperty = (obj, key) =>
+  Object.prototype.hasOwnProperty.call(obj, key);
 
 export { hasOwnProperty };
 
