@@ -59,7 +59,8 @@
 }
 
 .submit {
-  float: right;
+  display: block;
+  width: 100%;
   padding: 10px 20px;
   cursor: pointer;
   border: none;
@@ -76,4 +77,15 @@
   text-transform: capitalize;
   font-weight: bold;
   overflow-wrap: break-word;
+}
+
+@media (max-width: 400px) {
+  .inputMeta {
+    padding: 0;
+    min-width: unset;
+    flex: 1 0 auto;
+  }
+  .inputLabel {
+    display: none;
+  }
 }

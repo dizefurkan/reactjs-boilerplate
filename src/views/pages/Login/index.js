@@ -106,7 +106,7 @@ class Login extends Component {
       <DocumentTitle title={this.props.title}>
         <Grid>
           <Row>
-            <Col xs={12} md={8} mdOffset={2}>
+            <Col xs={12} md={6} mdOffset={3} sm={12} lg={6} lgOffset={3}>
               <h2>{this.props.title} Page</h2>
               <form
                 className={gbStyles.clearfix}
@@ -137,7 +137,7 @@ class Login extends Component {
                           && formField.email.length,
                       },
                     )}>
-                      <i className="far fa-user"></i>
+                      <i className="far fa-user" title="username"></i>
                       <span className={styles.inputLabel}>
                         email
                       </span>
@@ -178,7 +178,7 @@ class Login extends Component {
                           && formField.password.length,
                       },
                     )}>
-                      <i className="fas fa-key"></i>
+                      <i className="fas fa-key" title="password"></i>
                       <span className={styles.inputLabel}>
                         Password
                     </span>
