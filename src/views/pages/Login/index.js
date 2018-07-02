@@ -109,7 +109,7 @@ class Login extends Component {
       formField,
       submitMessage,
     } = this.state;
-    if (isRedirect) {
+    if (isRedirect || this.props.auth) {
       return <Redirect to='/' />;
     }
     return (
@@ -225,6 +225,7 @@ class Login extends Component {
 
 Login.propTypes = {
   title: PropTypes.string.isRequired,
+  auth: PropTypes.bool.isRequired,
 };
 
 export default Login;
