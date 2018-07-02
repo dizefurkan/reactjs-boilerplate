@@ -27,7 +27,6 @@ class App extends Component {
 
   componentWillMount() {
     const loggedIn = this.authService.loggedIn();
-    console.log(loggedIn);
     if (loggedIn) {
       this.setState({
         isRedirect: true,

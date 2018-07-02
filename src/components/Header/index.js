@@ -22,9 +22,6 @@ class Header extends React.Component {
                   <li className={styles.title}>
                     <a href="/login">Login</a>
                   </li>
-                  <li className={styles.title}>
-                    <a href="/register">Register</a
-                  ></li>
                 </ul>
               </div>
             </Col>

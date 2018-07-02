@@ -11,7 +11,7 @@ import DocumentTitle from 'react-document-title';
 import validateField from 'utils/validateField';
 import formFieldObject from 'utils/formFieldObject';
 import AuthService from 'services/authService';
-import gbStyles from 'src/public/main.css';
+import gbStyles from 'public/main.css';
 import styles from './styles.css';
 
 
@@ -49,7 +49,9 @@ class Login extends Component {
         submitMessage,
       });
       if (success) {
-        this.setState({ isRedirect: true });
+        this.setState({
+          isRedirect: true,
+        });
       }
     }
   }
@@ -78,22 +80,14 @@ class Login extends Component {
       validation,
       formField,
     } = this.state;
-    if (obj.email) {
-      if (obj.email.hasError) {
-        validation.email = false;
-        formField.email = obj.email.message;
+    const fieldName = Object.keys(obj)[0];
+    if (obj[fieldName]) {
+      if (obj[fieldName].hasError) {
+        validation[fieldName] = false;
+        formField[fieldName] = obj[fieldName].message;
       } else {
-        validation.email = true;
-        formField.email = '';
-      }
-    }
-    if (obj.password) {
-      if (obj.password.hasError) {
-        validation.password = false;
-        formField.password = obj.password.message;
-      } else {
-        validation.password = true;
-        formField.password = '';
+        validation[fieldName] = true;
+        formField[fieldName] = '';
       }
     }
     this.setState({
