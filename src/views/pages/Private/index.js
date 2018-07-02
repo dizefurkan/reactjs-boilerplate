@@ -10,7 +10,7 @@ class Private extends Component {
       return <Redirect to='/login' />;
     }
     return (
-      <Home title='Home' />
+      <Home title='Home' auth={this.props.auth} />
     );
   }
 }

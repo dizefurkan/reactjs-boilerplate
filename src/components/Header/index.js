@@ -1,10 +1,18 @@
 import React from 'react';
 import cx from 'classnames';
+import PropTypes from 'prop-types';
+import AuthService from 'services/authService';
+import { Link } from 'react-router-dom';
 import { Grid, Col, Row } from 'react-bootstrap';
 import gbStyles from 'public/main.css';
 import styles from './styles.css';
 
 class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.authService = new AuthService();
+  }
+
   render() {
     return (
       <header>
@@ -17,10 +25,18 @@ class Header extends React.Component {
                   styles.list,
                 )}>
                   <li className={styles.title}>
-                    <a href="/">Home</a>
+                    <Link to="/">Home</Link>
                   </li>
                   <li className={styles.title}>
-                    <a href="/login">Login</a>
+                    {
+                      this.props.auth
+                      ? <Link
+                          to='/'
+                          onClick={this.authService.logout()}>
+                          Logout
+                        </Link>
+                      : <Link to='/login'>Login</Link>
+                    }
                   </li>
                 </ul>
               </div>
@@ -31,5 +47,9 @@ class Header extends React.Component {
     );
   }
 }
+
+Header.propTypes = {
+  auth: PropTypes.bool.isRequired,
+};
 
 export default Header;

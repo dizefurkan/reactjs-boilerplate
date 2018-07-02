@@ -11,7 +11,7 @@ class Home extends Component {
     return (
       <DocumentTitle title={this.props.title}>
         <div>
-          <Header />
+          <Header auth={this.props.auth} />
           <Section />
           <Footer />
         </div>
@@ -23,5 +23,6 @@ class Home extends Component {
 export default Home;
 
 Home.propTypes = {
+  auth: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
 };

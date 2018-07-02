@@ -20,25 +20,19 @@ class App extends Component {
     super(props);
     this.state = {
       auth: false,
-      isRedirect: false,
     };
     this.authService = new AuthService();
   }
 
   componentWillMount() {
     const loggedIn = this.authService.loggedIn();
-    if (loggedIn) {
-      this.setState({
-        isRedirect: true,
-      });
-    }
     this.setState({
       auth: loggedIn,
     });
   }
 
   render() {
-    const { auth, isRedirect } = this.state;
+    const { auth } = this.state;
     return (
       <DocumentTitle title='React.js Boilerplate'>
         <BrowserRouter>
