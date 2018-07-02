@@ -6,8 +6,9 @@ import {
 } from 'react-bootstrap';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
-import validateField, { hasOwnProperty } from 'utils/validateField';
+import validateField from 'utils/validateField';
 import formFieldObject from 'utils/formFieldObject';
 import AuthService from 'services/authService';
 import gbStyles from 'src/public/main.css';
@@ -29,6 +30,7 @@ class Login extends Component {
         password: false,
       },
       submitMessage: '',
+      isRedirect: false,
     };
     this.AuthService = new AuthService();
   }
@@ -38,16 +40,16 @@ class Login extends Component {
     const { email, password, validation } = this.state;
     this.controlFormValidity('email', email);
     this.controlFormValidity('password', password);
+    const data = { email, password };
     if (validation.email && validation.password) {
-      const result = await this.AuthService.login(email, password);
-      const hasData = hasOwnProperty(result.data, 'success');
-      if (hasData) {
-        console.log(result.data);
-        const { data: { success, message, token } } = result;
-        const submitMessage = success ? token : message;
-        this.setState({
-          submitMessage,
-        });
+      const result = await this.AuthService.login(data);
+      const { data: { user, success, message } } = result;
+      const submitMessage = success ? `${user.name} ${user.surname}` : message;
+      this.setState({
+        submitMessage,
+      });
+      if (success) {
+        this.setState({ isRedirect: true });
       }
     }
   }
@@ -101,7 +103,15 @@ class Login extends Component {
   }
 
   render() {
-    const { validation, formField, submitMessage } = this.state;
+    const {
+      isRedirect,
+      validation,
+      formField,
+      submitMessage,
+    } = this.state;
+    if (isRedirect) {
+      return <Redirect to='/' />;
+    }
     return (
       <DocumentTitle title={this.props.title}>
         <Grid>
@@ -118,14 +128,6 @@ class Login extends Component {
                   </p>
                 }
                 <div className={styles.inputContainer}>
-                  {
-                    !validation.email &&
-                    <div className={styles.inputErrorMessageBox}>
-                      <span className={styles.inputErrorMessage}>
-                        { formField.email }
-                      </span>
-                    </div>
-                  }
                   <div className={cx(
                     styles.inputBox,
                     gbStyles.clearfix,
@@ -137,7 +139,7 @@ class Login extends Component {
                           && formField.email.length,
                       },
                     )}>
-                      <i className="far fa-user" title="username"></i>
+                      <i className="far fa-user" title="email"></i>
                       <span className={styles.inputLabel}>
                         email
                       </span>
@@ -157,16 +159,16 @@ class Login extends Component {
                       onChange={e => this.onChange(e) }
                     />
                   </div>
-                </div>
-                <div className={styles.inputContainer}>
                   {
-                    !validation.password &&
+                    !validation.email &&
                     <div className={styles.inputErrorMessageBox}>
                       <span className={styles.inputErrorMessage}>
-                        {formField.password}
+                        {formField.email}
                       </span>
                     </div>
                   }
+                </div>
+                <div className={styles.inputContainer}>
                   <div className={cx(
                     styles.inputBox,
                     gbStyles.clearfix,
@@ -198,6 +200,14 @@ class Login extends Component {
                       onChange={e => this.onChange(e)}
                     />
                   </div>
+                  {
+                    !validation.password &&
+                    <div className={styles.inputErrorMessageBox}>
+                      <span className={styles.inputErrorMessage}>
+                        {formField.password}
+                      </span>
+                    </div>
+                  }
                 </div>
                 <input
                   type="submit"

@@ -35,7 +35,7 @@ class Section extends React.Component {
   render() {
     const { haveData, data, array } = this.state;
     return (
-      <div className={styles.section}>
+      <section className={styles.section}>
         <Grid>
           <Row>
             <Col xs={12}>
@@ -58,7 +58,7 @@ class Section extends React.Component {
             </Col>
           </Row>
         </Grid>
-      </div>
+      </section>
     );
   }
 }
