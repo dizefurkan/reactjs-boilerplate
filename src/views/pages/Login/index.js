@@ -103,7 +103,7 @@ class Login extends Component {
       formField,
       submitMessage,
     } = this.state;
-    if (isRedirect || this.props.auth) {
+    if (isRedirect === true || this.props.auth) {
       return <Redirect to='/' />;
     }
     return (
