@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DocumentTitle from 'react-document-title';
-import styles from './styles.css';
+// import styles from './styles.css';
 
 class Register extends Component {
   render() {
@@ -15,8 +15,8 @@ class Register extends Component {
   }
 }
 
-export default Register;
-
 Register.propTypes = {
   title: PropTypes.string.isRequired,
 };
+
+export default Register;
