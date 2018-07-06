@@ -33,7 +33,7 @@ export default (fieldName, fieldValue) => {
         password: {
           isRequired: true,
           length: {
-            min: 6,
+            min: 8,
             max: 40,
           },
           value: fieldValue,
