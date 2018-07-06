@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
@@ -18,7 +19,7 @@ module.exports = {
       'public': path.resolve(__dirname, 'src/public/'),
       'components': path.resolve(__dirname, 'src/components/'),
       'utils': path.resolve(__dirname, 'src/utils'),
-      'services': path.resolve(__dirname, 'src/services'),
+      'services': path.resolve(__dirname, 'src/services')
     }
   },
   module: {
@@ -74,6 +75,9 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
   },
+  watchOptions: {
+    poll: true
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/public/index.html',
@@ -82,6 +86,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name].css",
       chunkFilename: "[id].css"
-    })
+    }),
+    new webpack.HotModuleReplacementPlugin()
   ]
 };

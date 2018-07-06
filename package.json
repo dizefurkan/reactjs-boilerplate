@@ -1,11 +1,11 @@
 {
   "name": "reactjs-boilerplate",
   "version": "1.0.0",
-  "description": "",
+  "description": "React.js Boilerplate",
   "main": "./src/public/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --mode development --open",
+    "start": "webpack-dev-server --watch --mode development --open",
     "dev": "webpack --mode devolopment",
     "build": "webpack --mode production"
   },

@@ -1,18 +1,10 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter,
-  Switch,
-  Redirect,
-} from 'react-router-dom';
+import { BrowserRouter, Switch } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
-import {
-  PropsRoute,
-  PublicRoute,
-  PrivateRoute,
-} from 'react-router-with-props';
+import { PropsRoute } from 'react-router-with-props';
+import AuthService from 'services/authService';
 import Login from 'src/views/pages/Login';
 import Private from 'src/views/pages/Private';
-import AuthService from 'services/authService';
 import NotFound404 from 'src/views/pages/NotFound404';
 
 class App extends Component {
