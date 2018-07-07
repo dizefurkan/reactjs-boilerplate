@@ -13,6 +13,11 @@ class Header extends React.Component {
     this.authService = new AuthService();
   }
 
+  logout() {
+    this.authService.logout();
+    window.location.reload();
+  }
+
   render() {
     return (
       <header>
@@ -32,7 +37,7 @@ class Header extends React.Component {
                       this.props.auth
                       ? <Link
                           to='/'
-                          onClick={e => this.authService.logout(e)}>
+                          onClick={e => this.logout(e)}>
                           Logout
                         </Link>
                       : <Link to='/login'>Login</Link>
