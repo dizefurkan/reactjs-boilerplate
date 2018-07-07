@@ -30,7 +30,6 @@ class Login extends Component {
         password: false,
       },
       submitMessage: '',
-      isRedirect: false,
     };
     this.AuthService = new AuthService();
   }
@@ -43,15 +42,13 @@ class Login extends Component {
     const data = { email, password };
     if (validation.email && validation.password) {
       const result = await this.AuthService.login(data);
-      const { data: { user, success, message } } = result;
-      const submitMessage = success ? `${user.name} ${user.surname}` : message;
+      const { data: { user, found, message } } = result;
+      const submitMessage = found ? `${user.name} ${user.surname}` : message;
       this.setState({
         submitMessage,
       });
-      if (success) {
-        this.setState({
-          isRedirect: true,
-        });
+      if (found) {
+        window.location.reload();
       }
     }
   }
@@ -75,8 +72,6 @@ class Login extends Component {
 
   controlField(obj) {
     const {
-      email,
-      password,
       validation,
       formField,
     } = this.state;
@@ -98,12 +93,11 @@ class Login extends Component {
 
   render() {
     const {
-      isRedirect,
       validation,
       formField,
       submitMessage,
     } = this.state;
-    if (isRedirect === true || this.props.auth) {
+    if (this.props.auth) {
       return <Redirect to='/' />;
     }
     return (
