@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch } from 'react-router-dom';
-import DocumentTitle from 'react-document-title';
 import { PropsRoute } from 'react-router-with-props';
+import DocumentTitle from 'react-document-title';
 import AuthService from 'services/authService';
+import Section from 'components/Section';
 import Login from 'src/views/pages/Login';
-import Private from 'src/views/pages/Private';
+import PrivateRoute from 'src/views/pages/PrivateRoute';
 import NotFound404 from 'src/views/pages/NotFound404';
 
 class App extends Component {
@@ -29,11 +30,11 @@ class App extends Component {
       <DocumentTitle title='React.js Boilerplate'>
         <BrowserRouter>
           <Switch>
-            <PropsRoute
+            <PrivateRoute
               exact
               path='/'
               auth={auth}
-              component={Private}
+              component={Section}
             />
             <PropsRoute
               path='/login'
