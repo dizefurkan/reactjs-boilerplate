@@ -11,6 +11,8 @@ import DocumentTitle from 'react-document-title';
 import validateField from 'utils/validateField';
 import formFieldObject from 'utils/formFieldObject';
 import AuthService from 'services/authService';
+import Form from 'src/views/partitions/Form';
+import Alert from 'src/views/partitions/Alert';
 import gbStyles from 'public/main.css';
 import styles from './styles.css';
 
@@ -29,17 +31,21 @@ class Login extends Component {
         email: false,
         password: false,
       },
+      isSubmited: false,
       submitMessage: '',
+      isShow: false,
     };
     this.AuthService = new AuthService();
   }
-
+  close() { this.setState({ isShow: false }); }
   async onSubmit(event) {
     event.preventDefault();
     const { email, password, validation } = this.state;
+    this.setState({ isShow: true });
     this.controlFormValidity('email', email);
     this.controlFormValidity('password', password);
     const data = { email, password };
+    this.setState({ isSubmited: true });
     if (validation.email && validation.password) {
       const result = await this.AuthService.login(data);
       const { data: { user, found, message } } = result;
@@ -52,24 +58,20 @@ class Login extends Component {
       }
     }
   }
-
   controlFormValidity(fieldName, fieldValue) {
     const formSubmitObj = this.formObject(fieldName, fieldValue);
     const result = validateField(formSubmitObj);
     this.controlField(result);
   }
-
   formObject(fieldName, fieldValue) {
     return formFieldObject(fieldName, fieldValue);
   }
-
   onChange(event) {
     const { target: { value, name } } = event;
     this.setState({
       [name]: value,
     });
   }
-
   controlField(obj) {
     const {
       validation,
@@ -90,13 +92,8 @@ class Login extends Component {
       formField,
     });
   }
-
   render() {
-    const {
-      validation,
-      formField,
-      submitMessage,
-    } = this.state;
+    const { formField, isShow } = this.state;
     if (this.props.auth) {
       return <Redirect to='/' />;
     }
@@ -104,104 +101,37 @@ class Login extends Component {
       <DocumentTitle title={this.props.title}>
         <Grid>
           <Row>
-            <Col xs={12} md={6} mdOffset={3} sm={12} lg={6} lgOffset={3}>
+            <Col
+              xs={12}
+              md={6} mdOffset={3}
+              sm={8} smOffset={2}
+              lg={6} lgOffset={3}
+            >
               <h2>{this.props.title} Page</h2>
-              <form
-                className={gbStyles.clearfix}
-                onSubmit={e => this.onSubmit(e)}
-              >
-                {
-                  <p className={styles.submitMessage}>
-                    {submitMessage}
-                  </p>
-                }
-                <div className={styles.inputContainer}>
-                  <div className={cx(
-                    styles.inputBox,
-                    gbStyles.clearfix,
-                  )}>
-                    <div className={cx(
-                      styles.inputMeta,
-                      {
-                        [styles.fieldError]: !validation.email
-                          && formField.email.length,
-                      },
-                    )}>
-                      <i className="far fa-user" title="email"></i>
-                      <span className={styles.inputLabel}>
-                        email
-                      </span>
-                    </div>
-                    <input
-                      type="input"
-                      className={cx(
-                        styles.input,
-                        {
-                          [styles.inputError]: !validation.email
-                            && formField.email.length,
-                        },
-                      )}
-                      placeholder="Example: test@test.com"
-                      name="email"
-                      title="email"
-                      onChange={e => this.onChange(e) }
-                    />
-                  </div>
-                  {
-                    !validation.email &&
-                    <div className={styles.inputErrorMessageBox}>
-                      <span className={styles.inputErrorMessage}>
-                        {formField.email}
-                      </span>
-                    </div>
-                  }
-                </div>
-                <div className={styles.inputContainer}>
-                  <div className={cx(
-                    styles.inputBox,
-                    gbStyles.clearfix,
-                  )}>
-                    <div className={cx(
-                      styles.inputMeta,
-                      {
-                        [styles.fieldError]: !validation.password
-                          && formField.password.length,
-                      },
-                    )}>
-                      <i className="fas fa-key" title="password"></i>
-                      <span className={styles.inputLabel}>
-                        Password
-                    </span>
-                    </div>
-                    <input
-                      type="password"
-                      className={cx(
-                        styles.input,
-                        {
-                          [styles.inputError]: !validation.password
-                            && formField.password.length,
-                        },
-                      )}
-                      placeholder="Example: 135645"
-                      name="password"
-                      title="password"
-                      onChange={e => this.onChange(e)}
-                    />
-                  </div>
-                  {
-                    !validation.password &&
-                    <div className={styles.inputErrorMessageBox}>
-                      <span className={styles.inputErrorMessage}>
-                        {formField.password}
-                      </span>
-                    </div>
-                  }
-                </div>
-                <input
-                  type="submit"
-                  className={styles.submit}
-                  value='Submit'
+              {
+                (isShow && (formField.email || formField.password)) &&
+                <Alert
+                  close={e => this.close(e)}
+                  messages={<AlertMessage formField={formField} />}
                 />
+              }
+              <form onSubmit={e => this.onSubmit(e)}>
+              {
+                Form.login.map((item, index) => (
+                  <div key={index} className={styles.inputBox}>
+                    <label className={styles.label}>{item.title}</label>
+                    <input
+                      className={styles.input}
+                      onChange={e => this.onChange(e)}
+                      {...item}
+                    />
+                  </div>
+                ))
+              }
+              <input
+              type='submit'
+              className={styles.submit}
+              />
               </form>
             </Col>
           </Row>
@@ -210,6 +140,19 @@ class Login extends Component {
     );
   }
 }
+
+class AlertMessage extends Component {
+  render() {
+    const { formField } = this.props;
+    const result = Object.keys(formField).map((item, index) =>
+      <div key={index}>{ formField[item]}</div>);
+    return <div>{result}</div>;
+  }
+}
+
+AlertMessage.propTypes = {
+  formField: PropTypes.object,
+};
 
 Login.propTypes = {
   title: PropTypes.string.isRequired,
