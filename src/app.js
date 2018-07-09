@@ -35,6 +35,7 @@ class App extends Component {
               path='/'
               auth={auth}
               component={Section}
+              title='Home Page'
             />
             <PropsRoute
               path='/login'
