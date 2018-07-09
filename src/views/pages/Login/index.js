@@ -4,7 +4,6 @@ import {
   Row,
   Col,
 } from 'react-bootstrap';
-import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
@@ -13,7 +12,7 @@ import formFieldObject from 'utils/formFieldObject';
 import AuthService from 'services/authService';
 import Form from 'src/views/partitions/Form';
 import Alert from 'src/views/partitions/Alert';
-import gbStyles from 'public/main.css';
+// import gbStyles from 'public/main.css';
 import styles from './styles.css';
 
 
@@ -23,36 +22,44 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      formField: {
+      formMessage: {
         email: '',
         password: '',
+        submit: '',
       },
       validation: {
         email: false,
         password: false,
       },
       isSubmited: false,
-      submitMessage: '',
       isShow: false,
     };
     this.AuthService = new AuthService();
   }
-  close() { this.setState({ isShow: false }); }
+  close(key) {
+    this.setState({ isShow: false });
+  }
   async onSubmit(event) {
     event.preventDefault();
-    const { email, password, validation } = this.state;
-    this.setState({ isShow: true });
+    const {
+      email,
+      password,
+      validation,
+      formMessage,
+    } = this.state;
+    formMessage.submit = '';
+    this.setState({ formMessage });
     this.controlFormValidity('email', email);
     this.controlFormValidity('password', password);
     const data = { email, password };
-    this.setState({ isSubmited: true });
+    this.setState({ isShow: true, isSubmited: true });
     if (validation.email && validation.password) {
       const result = await this.AuthService.login(data);
       const { data: { user, found, message } } = result;
-      const submitMessage = found ? `${user.name} ${user.surname}` : message;
-      this.setState({
-        submitMessage,
-      });
+      formMessage.submit = found
+        ? `${user.name} ${user.surname}`
+        : message;
+      this.setState({ formMessage });
       if (found) {
         window.location.reload();
       }
@@ -75,25 +82,33 @@ class Login extends Component {
   controlField(obj) {
     const {
       validation,
-      formField,
+      formMessage,
     } = this.state;
     const fieldName = Object.keys(obj)[0];
     if (obj[fieldName]) {
       if (obj[fieldName].hasError) {
         validation[fieldName] = false;
-        formField[fieldName] = obj[fieldName].message;
+        formMessage[fieldName] = obj[fieldName].message;
       } else {
         validation[fieldName] = true;
-        formField[fieldName] = '';
+        formMessage[fieldName] = '';
       }
     }
     this.setState({
       validation,
-      formField,
+      formMessage,
     });
   }
   render() {
-    const { formField, isShow } = this.state;
+    const {
+      formMessage,
+      formMessage: {
+        email,
+        password,
+        submit,
+      },
+      isShow,
+    } = this.state;
     if (this.props.auth) {
       return <Redirect to='/' />;
     }
@@ -109,29 +124,30 @@ class Login extends Component {
             >
               <h2>{this.props.title} Page</h2>
               {
-                (isShow && (formField.email || formField.password)) &&
+                isShow &&
+                (email || password || submit) &&
                 <Alert
                   close={e => this.close(e)}
-                  messages={<AlertMessage formField={formField} />}
+                  messages={<AlertMessage formMessage={formMessage} />}
                 />
               }
               <form onSubmit={e => this.onSubmit(e)}>
-              {
-                Form.login.map((item, index) => (
-                  <div key={index} className={styles.inputBox}>
-                    <label className={styles.label}>{item.title}</label>
-                    <input
-                      className={styles.input}
-                      onChange={e => this.onChange(e)}
-                      {...item}
-                    />
-                  </div>
-                ))
-              }
-              <input
-              type='submit'
-              className={styles.submit}
-              />
+                {
+                  Form.login.map((item, index) => (
+                    <div key={index} className={styles.inputBox}>
+                      <label className={styles.label}>{item.title}</label>
+                      <input
+                        className={styles.input}
+                        onChange={e => this.onChange(e)}
+                        {...item}
+                      />
+                    </div>
+                  ))
+                }
+                <input
+                  type='submit'
+                  className={styles.submit}
+                />
               </form>
             </Col>
           </Row>
@@ -143,15 +159,14 @@ class Login extends Component {
 
 class AlertMessage extends Component {
   render() {
-    const { formField } = this.props;
-    const result = Object.keys(formField).map((item, index) =>
-      <div key={index}>{ formField[item]}</div>);
-    return <div>{result}</div>;
+    const { formMessage } = this.props;
+    return Object.keys(formMessage).map((item, index) =>
+      <div key={index}>{formMessage[item]}</div>);
   }
 }
 
 AlertMessage.propTypes = {
-  formField: PropTypes.object,
+  formMessage: PropTypes.object,
 };
 
 Login.propTypes = {
