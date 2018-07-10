@@ -4,8 +4,8 @@ import { PropsRoute } from 'react-router-with-props';
 import DocumentTitle from 'react-document-title';
 import AuthService from 'services/authService';
 import Home from 'components/Home';
+import PrivateRoute from 'components/PrivateRoute';
 import Login from 'src/views/pages/Login';
-import PrivateRoute from 'src/views/pages/PrivateRoute';
 import NotFound404 from 'src/views/pages/NotFound404';
 
 class App extends Component {
