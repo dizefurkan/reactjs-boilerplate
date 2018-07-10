@@ -109,7 +109,7 @@ class Login extends Component {
       },
       isShow,
     } = this.state;
-    if (this.props.auth) {
+    if (this.props.state.auth) {
       return <Redirect to='/' />;
     }
     return (
@@ -171,7 +171,7 @@ AlertMessage.propTypes = {
 
 Login.propTypes = {
   title: PropTypes.string.isRequired,
-  auth: PropTypes.bool.isRequired,
+  state: PropTypes.object.isRequired,
 };
 
 export default Login;

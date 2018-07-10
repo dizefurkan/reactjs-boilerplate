@@ -34,7 +34,7 @@ class Header extends React.Component {
                   </li>
                   <li className={styles.title}>
                     {
-                      this.props.auth
+                      this.props.state.auth
                       ? <Link
                           to='/'
                           onClick={e => this.logout(e)}>
@@ -54,7 +54,7 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-  auth: PropTypes.bool.isRequired,
+  state: PropTypes.object.isRequired,
 };
 
 export default Header;

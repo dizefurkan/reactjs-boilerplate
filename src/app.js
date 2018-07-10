@@ -13,6 +13,7 @@ class App extends Component {
     super(props);
     this.state = {
       auth: false,
+      modal: false,
     };
     this.authService = new AuthService();
   }
@@ -24,8 +25,12 @@ class App extends Component {
     });
   }
 
+  setModal(event) {
+    event.preventDefault();
+    this.setState({ modal: !this.state.modal });
+  }
+
   render() {
-    const { auth } = this.state;
     return (
       <DocumentTitle title='React.js Boilerplate'>
         <BrowserRouter>
@@ -33,13 +38,15 @@ class App extends Component {
             <PrivateRoute
               exact
               path='/'
-              auth={auth}
+              state={this.state}
+              modal={e => this.setModal(e)}
               component={Home}
               title='Home Page'
             />
             <PropsRoute
               path='/login'
-              auth={auth}
+              state={this.state}
+              modal={e => this.setModal(e)}
               component={Login}
               title='Login'
             />

@@ -1,11 +1,13 @@
 import React from 'react';
 import fetch from 'services/customFetch';
+import PropTypes from 'prop-types';
 import { Grid, Row, Col } from 'react-bootstrap';
+import Modal from 'src/views/partitions/Modal';
 import styles from './styles.css';
 
 class Home extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       data: '',
       haveData: false,
@@ -32,6 +34,20 @@ class Home extends React.Component {
     });
   }
 
+  modalMessage() {
+    return (
+      <div>
+        <h1 className={styles.modalTitle}>
+          test
+        </h1>
+      </div>
+    );
+  }
+
+  modalClick() {
+    this.props.modal();
+  }
+
   render() {
     const { haveData, data } = this.state;
     return (
@@ -40,6 +56,16 @@ class Home extends React.Component {
           <Row>
             <Col xs={12}>
               <h1 className={styles.title}>This is Home Area</h1>
+              <button onClick={this.props.modal}>
+                Show Modal: {this.props.state.modal}
+              </button>
+              {
+                this.props.state.modal &&
+                <Modal
+                  child={this.modalMessage()}
+                  onClick={this.props.modal}
+                />
+              }
               {
                 haveData ? (
                   <button onClick={e => this.clearData(e)}>Clear Data</button>
@@ -62,5 +88,10 @@ class Home extends React.Component {
     );
   }
 }
+
+Home.propTypes = {
+  state: PropTypes.object.isRequired,
+  modal: PropTypes.func,
+};
 
 export default Home;
