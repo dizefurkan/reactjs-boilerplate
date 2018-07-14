@@ -6,6 +6,7 @@ import AuthService from 'services/authService';
 import Home from 'components/Home';
 import PrivateRoute from 'components/PrivateRoute';
 import Login from 'src/views/pages/Login';
+import Register from 'src/views/pages/Register';
 import NotFound404 from 'src/views/pages/NotFound404';
 
 class App extends Component {
@@ -49,6 +50,13 @@ class App extends Component {
               modal={e => this.setModal(e)}
               component={Login}
               title='Login'
+            />
+            <PropsRoute
+              path='/register'
+              state={this.state}
+              modal={e => this.setModal(e)}
+              component={Register}
+              title='Register'
             />
             <PropsRoute
               path=''

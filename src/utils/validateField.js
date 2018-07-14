@@ -1,7 +1,22 @@
 const hasOwnProperty = (obj, key) =>
   Object.prototype.hasOwnProperty.call(obj, key);
-
 export { hasOwnProperty };
+
+const isValidated = (obj) => {
+  let result;
+  const array = Object.keys(obj);
+  for (let i = 0; i < array.length; i += 1) {
+    const item = obj[array[i]];
+    if (!item) {
+      result = false;
+    }
+  }
+  if (typeof result === 'undefined') {
+    result = true;
+  }
+  return result;
+};
+export { isValidated };
 
 const syntax = (key, value) => {
   const response = {};

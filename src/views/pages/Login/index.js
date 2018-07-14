@@ -7,10 +7,11 @@ import {
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
-import validateField from 'utils/validateField';
-import formFieldObject from 'utils/formFieldObject';
+import validateField, { isValidated } from 'utils/validateField';
+import formSchema from 'utils/formSchema';
 import AuthService from 'services/authService';
 import Form from 'src/views/partitions/Form';
+import FormStyles from 'src/views/partitions/Form/styles.css';
 import Alert from 'src/views/partitions/Alert';
 // import gbStyles from 'public/main.css';
 import styles from './styles.css';
@@ -20,8 +21,10 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
+      form: {
+        email: '',
+        password: '',
+      },
       formMessage: {
         email: '',
         password: '',
@@ -32,29 +35,30 @@ class Login extends Component {
         password: false,
       },
       isSubmited: false,
-      isShow: false,
+      isAlertActive: false,
     };
     this.AuthService = new AuthService();
   }
   close(key) {
-    this.setState({ isShow: false });
+    this.setState({ isAlertActive: false });
   }
   async onSubmit(event) {
     event.preventDefault();
     const {
-      email,
-      password,
+      form,
       validation,
+      validation: {
+        email,
+        password,
+      },
       formMessage,
     } = this.state;
     formMessage.submit = '';
     this.setState({ formMessage });
-    this.controlFormValidity('email', email);
-    this.controlFormValidity('password', password);
-    const data = { email, password };
-    this.setState({ isShow: true, isSubmited: true });
-    if (validation.email && validation.password) {
-      const result = await this.AuthService.login(data);
+    Object.keys(form).map(key => this.controlFormValidity(key, form[key]));
+    this.setState({ isAlertActive: true, isSubmited: true });
+    if (isValidated(validation)) {
+      const result = await this.AuthService.login(form);
       const { data: { user, found, message } } = result;
       formMessage.submit = found
         ? `${user.name} ${user.surname}`
@@ -66,18 +70,18 @@ class Login extends Component {
     }
   }
   controlFormValidity(fieldName, fieldValue) {
-    const formSubmitObj = this.formObject(fieldName, fieldValue);
+    const formSubmitObj = this.formFieldSchema(fieldName, fieldValue);
     const result = validateField(formSubmitObj);
     this.controlField(result);
   }
-  formObject(fieldName, fieldValue) {
-    return formFieldObject(fieldName, fieldValue);
+  formFieldSchema(fieldName, fieldValue) {
+    return formSchema(fieldName, fieldValue);
   }
   onChange(event) {
+    const { form } = this.state;
     const { target: { value, name } } = event;
-    this.setState({
-      [name]: value,
-    });
+    form[name] = value;
+    this.setState({ form });
   }
   controlField(obj) {
     const {
@@ -102,12 +106,8 @@ class Login extends Component {
   render() {
     const {
       formMessage,
-      formMessage: {
-        email,
-        password,
-        submit,
-      },
-      isShow,
+      isAlertActive,
+      validation,
     } = this.state;
     if (this.props.state.auth) {
       return <Redirect to='/' />;
@@ -122,10 +122,10 @@ class Login extends Component {
               sm={8} smOffset={2}
               lg={6} lgOffset={3}
             >
-              <h2>{this.props.title} Page</h2>
+              <h2>{this.props.title}</h2>
               {
-                isShow &&
-                (email || password || submit) &&
+                isAlertActive &&
+                !isValidated(validation) &&
                 <Alert
                   close={e => this.close(e)}
                   messages={<AlertMessage formMessage={formMessage} />}
@@ -134,10 +134,10 @@ class Login extends Component {
               <form onSubmit={e => this.onSubmit(e)}>
                 {
                   Form.login.map((item, index) => (
-                    <div key={index} className={styles.inputBox}>
-                      <label className={styles.label}>{item.title}</label>
+                    <div key={index} className={FormStyles.inputBox}>
+                      <label className={FormStyles.label}>{item.title}</label>
                       <input
-                        className={styles.input}
+                        className={FormStyles.input}
                         onChange={e => this.onChange(e)}
                         {...item}
                       />
@@ -146,7 +146,7 @@ class Login extends Component {
                 }
                 <input
                   type='submit'
-                  className={styles.submit}
+                  className={FormStyles.submit}
                 />
               </form>
             </Col>

@@ -28,6 +28,26 @@ export default class authService {
     }
   }
 
+  async register(data) {
+    try {
+      const headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      };
+
+      const obj = {
+        method: 'post',
+        url: 'http://localhost:3030/register',
+        data,
+        headers,
+      };
+      const response = await fetch(obj);
+      return response;
+    } catch (err) {
+      return err;
+    }
+  }
+
   checkStatus(response) {
     if (response.status >= 200 && response.status <= 300) {
       return response;

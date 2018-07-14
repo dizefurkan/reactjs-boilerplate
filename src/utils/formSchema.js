@@ -1,9 +1,9 @@
 export default (fieldName, fieldValue) => {
-  let formObject = {};
+  let schema = {};
   switch (fieldName) {
     case 'username': {
-      formObject = {
-        username: {
+      schema = {
+        [fieldName]: {
           isRequired: true,
           length: {
             min: 5,
@@ -15,8 +15,8 @@ export default (fieldName, fieldValue) => {
       break;
     }
     case 'email': {
-      formObject = {
-        email: {
+      schema = {
+        [fieldName]: {
           isRequired: true,
           length: {
             min: 5,
@@ -29,8 +29,34 @@ export default (fieldName, fieldValue) => {
       break;
     }
     case 'password': {
-      formObject = {
-        password: {
+      schema = {
+        [fieldName]: {
+          isRequired: true,
+          length: {
+            min: 8,
+            max: 40,
+          },
+          value: fieldValue,
+        },
+      };
+      break;
+    }
+    case 'name': {
+      schema = {
+        [fieldName]: {
+          isRequired: true,
+          length: {
+            min: 8,
+            max: 40,
+          },
+          value: fieldValue,
+        },
+      };
+      break;
+    }
+    case 'surname': {
+      schema = {
+        [fieldName]: {
           isRequired: true,
           length: {
             min: 8,
@@ -44,5 +70,5 @@ export default (fieldName, fieldValue) => {
     default:
       break;
   }
-  return formObject;
+  return schema;
 };
