@@ -3,3 +3,7 @@
   clear: both;
   display: table;
 }
+
+.modalActive {
+	overflow: hidden;
+}

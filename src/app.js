@@ -9,6 +9,7 @@ import Login from 'src/views/pages/Login';
 import Register from 'src/views/pages/Register';
 import ResetPassword from 'src/views/pages/ResetPassword';
 import NotFound404 from 'src/views/pages/NotFound404';
+import gbStyles from 'public/main.css';
 
 class App extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class App extends Component {
   setModal(event) {
     event.preventDefault();
     this.setState({ modal: !this.state.modal });
+    document.getElementById('body').classList.toggle(gbStyles.modalActive);
   }
 
   render() {

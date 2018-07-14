@@ -9,11 +9,6 @@ import Footer from 'components/Footer';
 import styles from './styles.css';
 
 class PrivateRoute extends Component {
-  componentWillReceiveProps() {
-    if (!this.props.state.modal || this.props.state.modal) {
-      document.getElementById('body').classList.toggle(styles.modalActive);
-    }
-  }
   render() {
     if (!this.props.state.auth) { return <Redirect to='/login' />; }
     return (
