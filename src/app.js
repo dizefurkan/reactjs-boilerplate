@@ -50,20 +50,20 @@ class App extends Component {
               state={this.state}
               modal={e => this.setModal(e)}
               component={Login}
-              title='Login'
+              title='Login Page'
             />
             <PropsRoute
               path='/register'
               state={this.state}
               modal={e => this.setModal(e)}
               component={Register}
-              title='Register'
+              title='Register Page'
             />
             <PropsRoute
               path='/reset-password'
               modal={e => this.setModal(e)}
               component={ResetPassword}
-              title='ResetPassword'
+              title='Reset Password'
             />
             <PropsRoute
               path=''
