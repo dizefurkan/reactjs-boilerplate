@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DocumentTitle from 'react-document-title';
+import { Grid, Row, Col } from 'react-bootstrap';
 import AuthService from 'services/authService';
 import Form from 'src/views/partitions/Form';
 import FormStyles from 'src/views/partitions/Form/styles.css';
