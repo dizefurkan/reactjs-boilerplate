@@ -7,6 +7,7 @@ import Home from 'components/Home';
 import PrivateRoute from 'components/PrivateRoute';
 import Login from 'src/views/pages/Login';
 import Register from 'src/views/pages/Register';
+import ResetPassword from 'src/views/pages/ResetPassword';
 import NotFound404 from 'src/views/pages/NotFound404';
 
 class App extends Component {
@@ -57,6 +58,12 @@ class App extends Component {
               modal={e => this.setModal(e)}
               component={Register}
               title='Register'
+            />
+            <PropsRoute
+              path='/reset-password'
+              modal={e => this.setModal(e)}
+              component={ResetPassword}
+              title='ResetPassword'
             />
             <PropsRoute
               path=''

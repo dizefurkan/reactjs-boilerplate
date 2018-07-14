@@ -13,15 +13,6 @@ module.exports = {
     filename: 'index_bundle.js',
     publicPath: '/'
   },
-  resolve: {
-    alias: {
-      'src': path.resolve(__dirname, 'src/'),
-      'public': path.resolve(__dirname, 'src/public/'),
-      'components': path.resolve(__dirname, 'src/components/'),
-      'utils': path.resolve(__dirname, 'src/utils'),
-      'services': path.resolve(__dirname, 'src/services')
-    }
-  },
   module: {
     rules: [
       {

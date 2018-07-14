@@ -47,10 +47,6 @@ class Login extends Component {
     const {
       form,
       validation,
-      validation: {
-        email,
-        password,
-      },
       formMessage,
     } = this.state;
     formMessage.submit = '';
@@ -149,6 +145,13 @@ class Login extends Component {
                   className={FormStyles.submit}
                 />
               </form>
+              <p>
+                <a href='/reset-password'>Forget password?</a>
+              </p>
+              <p>
+                Not have account yet?&nbsp;
+                <a href='/register'>sign up</a>
+              </p>
             </Col>
           </Row>
         </Grid>

@@ -43,4 +43,12 @@ export default {
       placeholder: 'Doe',
     },
   ],
+  resetPassword: [
+    {
+      type: 'text',
+      name: 'email',
+      title: 'Email',
+      placeholder: 'email@example.com',
+    },
+  ],
 };

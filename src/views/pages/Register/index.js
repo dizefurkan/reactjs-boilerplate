@@ -137,6 +137,10 @@ class Register extends Component {
                   className={FormStyles.submit}
                 />
               </form>
+              <p>
+                Already have account go&nbsp;
+                <a href='/login'>sign in</a>
+              </p>
             </Col>
           </Row>
         </Grid>
