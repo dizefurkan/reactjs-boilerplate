@@ -3,7 +3,5 @@
 }
 
 .modalActive {
-  position: fixed;
-  width: 100%;
   overflow: hidden;
 }
