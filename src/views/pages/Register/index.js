@@ -58,7 +58,7 @@ class Register extends Component {
     }
   }
   controlFormValidity(fieldName, fieldValue) {
-    const formObj = this.formFieldSchema(fieldName, fieldValue);
+    const formObj = formSchema(fieldName, fieldValue);
     const validateResult = validateField(formObj);
     this.controlField(validateResult);
   }
@@ -81,9 +81,6 @@ class Register extends Component {
       validation,
       formMessage,
     });
-  }
-  formFieldSchema(fieldName, fieldValue) {
-    return formSchema(fieldName, fieldValue);
   }
   onChange(event) {
     const { form } = this.state;
