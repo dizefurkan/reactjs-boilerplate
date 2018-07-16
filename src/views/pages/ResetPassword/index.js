@@ -48,12 +48,9 @@ class ResetPassword extends Component {
     }
   }
   controlFormValidity(fieldName, fieldValue) {
-    const formSubmitObj = this.formFieldSchema(fieldName, fieldValue);
+    const formSubmitObj = formSchema(fieldName, fieldValue);
     const result = validateField(formSubmitObj);
     this.controlField(result);
-  }
-  formFieldSchema(fieldName, fieldValue) {
-    return formSchema(fieldName, fieldValue);
   }
   onChange(event) {
     const { form } = this.state;
