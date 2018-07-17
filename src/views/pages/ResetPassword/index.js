@@ -24,7 +24,6 @@ class ResetPassword extends Component {
       validation: {
         email: false,
       },
-      isSubmited: false,
       isAlertActive: false,
     };
     this.AuthService = new AuthService();
@@ -42,7 +41,7 @@ class ResetPassword extends Component {
     formMessage.submit = '';
     this.setState({ formMessage });
     Object.keys(form).map(key => this.controlFormValidity(key, form[key]));
-    this.setState({ isAlertActive: true, isSubmited: true });
+    this.setState({ isAlertActive: true });
     if (isValidated(validation)) {
       const result = await this.AuthService.resetPassword(form);
     }

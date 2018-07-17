@@ -34,7 +34,6 @@ class Login extends Component {
         email: false,
         password: false,
       },
-      isSubmited: false,
       isAlertActive: false,
     };
     this.AuthService = new AuthService();
@@ -52,7 +51,7 @@ class Login extends Component {
     formMessage.submit = '';
     this.setState({ formMessage });
     Object.keys(form).map(key => this.controlFormValidity(key, form[key]));
-    this.setState({ isAlertActive: true, isSubmited: true });
+    this.setState({ isAlertActive: true });
     if (isValidated(validation)) {
       const result = await this.AuthService.login(form);
       const { data: { user, found, message } } = result;
