@@ -262,6 +262,84 @@ controlFormValidity(fieldName, fieldValue) {
   setField(result, validation, formMessage);
 }
 ```
+```js
+<Alert
+  close={e => this.close(e)}
+  messages={<AlertMessage formMessage={formMessage} />}
+/>
+```
+---
+### Alert
+Show Alert (HOC)
+```js
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import styles from './styles.css';
+
+class Alert extends Component {
+  render() {
+    return (
+      <div className={styles.alertBox}>
+        <div>{this.props.messages}</div>
+        <span className={styles.close} onClick={e => this.props.close(e)}>
+          <i className={`${styles.icon} far fa-window-close`}></i>
+        </span>
+      </div>
+    );
+  }
+}
+
+Alert.propTypes = {
+  messages: PropTypes.any,
+  close: PropTypes.func,
+};
+
+export default Alert;
+
+```
+---
+### Modal
+Show Modal
+```js
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Grid, Row, Col } from 'react-bootstrap';
+import styles from './styles.css';
+
+class Modal extends Component {
+  render() {
+    return (
+      <div className={styles.modalBox}>
+        <div className={styles.filter}></div>
+        <Grid>
+          <Row>
+            <Col xs={12}>
+              <div
+                className={styles.closeBox}
+                onClick={this.props.onClick}
+              >
+                <span className={styles.close}>
+                  &#x2715;
+                </span>
+              </div>
+              <div className={styles.box}>
+                {this.props.child}
+              </div>
+            </Col>
+          </Row>
+        </Grid>
+      </div>
+    );
+  }
+}
+
+Modal.propTypes = {
+  child: PropTypes.any.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
+
+export default Modal;
+```
 ---
 ### Path Alias
 Set Alias for Folder Path
