@@ -18,6 +18,21 @@ const isValidated = (obj) => {
 };
 export { isValidated };
 
+const setField = (obj, validation, formMessage) => {
+  const fieldName = Object.keys(obj)[0];
+  if (obj[fieldName]) {
+    if (obj[fieldName].hasError) {
+      validation[fieldName] = false;
+      formMessage[fieldName] = obj[fieldName].message;
+    } else {
+      validation[fieldName] = true;
+      formMessage[fieldName] = '';
+    }
+  }
+  return { validation, formMessage };
+};
+export { setField };
+
 const syntax = (key, value) => {
   const response = {};
   switch (key) {

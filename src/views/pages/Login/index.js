@@ -7,7 +7,7 @@ import {
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
-import validateField, { isValidated } from 'utils/validateField';
+import formValidator, { isValidated, setField } from 'utils/formValidator';
 import formSchema from 'utils/formSchema';
 import AuthService from 'services/authService';
 import Form from 'src/views/partitions/Form';
@@ -67,34 +67,15 @@ class Login extends Component {
   }
   controlFormValidity(fieldName, fieldValue) {
     const formSubmitObj = formSchema(fieldName, fieldValue);
-    const result = validateField(formSubmitObj);
-    this.controlField(result);
+    const result = formValidator(formSubmitObj);
+    const { validation, formMessage } = this.state;
+    setField(result, validation, formMessage);
   }
   onChange(event) {
     const { form } = this.state;
     const { target: { value, name } } = event;
     form[name] = value;
     this.setState({ form });
-  }
-  controlField(obj) {
-    const {
-      validation,
-      formMessage,
-    } = this.state;
-    const fieldName = Object.keys(obj)[0];
-    if (obj[fieldName]) {
-      if (obj[fieldName].hasError) {
-        validation[fieldName] = false;
-        formMessage[fieldName] = obj[fieldName].message;
-      } else {
-        validation[fieldName] = true;
-        formMessage[fieldName] = '';
-      }
-    }
-    this.setState({
-      validation,
-      formMessage,
-    });
   }
   render() {
     const {

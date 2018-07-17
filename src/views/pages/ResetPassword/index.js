@@ -6,7 +6,7 @@ import AuthService from 'services/authService';
 import Form from 'src/views/partitions/Form';
 import FormStyles from 'src/views/partitions/Form/styles.css';
 import formSchema from 'utils/formSchema';
-import validateField, { isValidated } from 'utils/validateField';
+import formValidator, { isValidated, setField } from 'utils/formValidator';
 import Alert from 'src/views/partitions/Alert';
 import styles from './styles.css';
 
@@ -49,8 +49,9 @@ class ResetPassword extends Component {
   }
   controlFormValidity(fieldName, fieldValue) {
     const formSubmitObj = formSchema(fieldName, fieldValue);
-    const result = validateField(formSubmitObj);
-    this.controlField(result);
+    const result = formValidator(formSubmitObj);
+    const { validation, formMessage } = this.state;
+    setField(result, validation, formMessage);
   }
   onChange(event) {
     const { form } = this.state;

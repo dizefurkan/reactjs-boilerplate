@@ -8,7 +8,7 @@ import AuthService from 'services/authService';
 import Form from 'src/views/partitions/Form';
 import FormStyles from 'src/views/partitions/Form/styles.css';
 import formSchema from 'utils/formSchema';
-import validateField, { isValidated } from 'utils/validateField';
+import formValidator, { isValidated, setField } from 'utils/formValidator';
 import styles from './styles.css';
 
 class Register extends Component {
@@ -59,28 +59,9 @@ class Register extends Component {
   }
   controlFormValidity(fieldName, fieldValue) {
     const formObj = formSchema(fieldName, fieldValue);
-    const validateResult = validateField(formObj);
-    this.controlField(validateResult);
-  }
-  controlField(obj) {
-    const {
-      validation,
-      formMessage,
-    } = this.state;
-    const fieldName = Object.keys(obj)[0];
-    if (obj[fieldName]) {
-      if (obj[fieldName].hasError) {
-        validation[fieldName] = false;
-        formMessage[fieldName] = obj[fieldName].message;
-      } else {
-        validation[fieldName] = true;
-        formMessage[fieldName] = '';
-      }
-    }
-    this.setState({
-      validation,
-      formMessage,
-    });
+    const result = formValidator(formObj);
+    const { validation, formMessage } = this.state;
+    setField(result, validation, formMessage);
   }
   onChange(event) {
     const { form } = this.state;
