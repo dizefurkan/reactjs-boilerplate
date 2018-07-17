@@ -54,7 +54,9 @@ Constantly improving and updating. Because I use it on my own projects.
 |src/services|Put files like helper, with fetch operations (MVC)|
 |src/utils|Keep files here like; form validations.|
 |src/views|This folder for pages like login page, register, 404, 500...|
+
 ---
+
 ## Code Examples
 ### App.js
 You can see the DocumentTitle for page title on browser
@@ -70,17 +72,33 @@ class App extends Component {
       <DocumentTitle title='React.js Boilerplate'>
         <BrowserRouter>
           <Switch>
-            <PropsRoute
+            <PrivateRoute
               exact
               path='/'
-              auth={auth}
-              component={Private}
+              state={this.state}
+              modal={e => this.setModal(e)}
+              component={Home}
+              title='Home Page'
             />
             <PropsRoute
               path='/login'
-              auth={auth}
+              state={this.state}
+              modal={e => this.setModal(e)}
               component={Login}
-              title='Login'
+              title='Login Page'
+            />
+            <PropsRoute
+              path='/register'
+              state={this.state}
+              modal={e => this.setModal(e)}
+              component={Register}
+              title='Register Page'
+            />
+            <PropsRoute
+              path='/reset-password'
+              modal={e => this.setModal(e)}
+              component={ResetPassword}
+              title='Reset Password'
             />
             <PropsRoute
               path=''
@@ -98,28 +116,24 @@ export default App;
 ```
 ```js
 // Private Component
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
-import Home from 'components/Home';
-import styles from './styles.css';
-
-class Private extends Component {
+...
+class PrivateRoute extends Component {
   render() {
-    if (!this.props.auth) {
-      return <Redirect to='/login' />;
-    }
+    if (!this.props.state.auth) { return <Redirect to='/login' />; }
     return (
-      <Home title='Home' auth={this.props.auth} />
+      <DocumentTitle title={this.props.title}>
+        <div>
+          <Header state={this.props.state}/>
+          <PropsRoute
+            {...this.props}
+          />
+          <Footer />
+        </div>
+      </DocumentTitle>
     );
   }
 }
-
-Private.propTypes = {
-  auth: PropTypes.bool.isRequired,
-};
-
-export default Private;
+...
 ```
 ---
 ## Whats inside
@@ -148,6 +162,105 @@ output;
 webpack.config.js;
 ```js
 localIdentName: "[name]__[local]___[hash:base64:5]"
+```
+---
+### Form Validation
+Like joi but it was written by me
+#### Guide
+#####1) Create Your States
+```js
+this.state = {
+  form: { // for keep input values
+    email: '',
+    password: '',
+  },
+  formMessage: { // for show error message to each input...
+    email: '',
+    password: '',
+    submit: '',
+  },
+  validation: { // boolean validation objects for each input
+    email: false,
+    password: false,
+  },
+  isAlertActive: false, // for <Alert /> component
+};
+```
+#####2) Set Your Inputs on views/partitions/Form
+```js
+export default {
+  login: [
+    {
+      type: 'text',
+      name: 'email',
+      title: 'Email',
+      placeholder: 'email@example.com',
+    },
+    {
+      type: 'password',
+      name: 'password',
+      title: 'Password',
+    },
+  ],
+  register: [...],
+}
+```
+#####3) import views/partitions/Form and it will be auto implemented
+
+```js
+<form onSubmit={e => this.onSubmit(e)}>
+  {
+    Form.login.map((item, index) => (
+      <div key={index} className={FormStyles.inputBox}>
+        <label className={FormStyles.label}>{item.title}</label>
+        <input
+          className={FormStyles.input}
+          onChange={e => this.onChange(e)}
+          {...item}
+        />
+      </div>
+    ))
+  }
+  <input
+    type='submit'
+    className={FormStyles.submit}
+  />
+</form>
+```
+#####4) Create functions
+
+```js
+onChange(event) {
+  const { form } = this.state;
+  const { target: { value, name } } = event;
+  form[name] = value;
+  this.setState({ form });
+}
+```
+```js
+async onSubmit(event) {
+  event.preventDefault();
+  const {
+    form,
+    validation,
+    formMessage,
+  } = this.state;
+  formMessage.submit = '';
+  this.setState({ formMessage });
+  Object.keys(form).map(key => this.controlFormValidity(key, form[key]));
+  this.setState({ isAlertActive: true, isSubmited: true });
+  if (isValidated(validation)) {
+    // When it passed...
+  }
+}
+```
+```js
+controlFormValidity(fieldName, fieldValue) {
+  const formSubmitObj = formSchema(fieldName, fieldValue);
+  const result = formValidator(formSubmitObj);
+  const { validation, formMessage } = this.state;
+  setField(result, validation, formMessage);
+}
 ```
 ---
 ### Path Alias
